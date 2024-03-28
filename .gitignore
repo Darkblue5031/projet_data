@@ -2,6 +2,7 @@
 __pycache__/
 Dashboard/__pycache__/
 Dashboard/Dashboard/__pycache__/
+Dashboard/db.sqlite3
 *.py[cod]
 *$py.class
 .idea/
