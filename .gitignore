@@ -1,8 +1,11 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+Dashboard/__pycache__/
+Dashboard/Dashboard/__pycache__/
 *.py[cod]
 *$py.class
-
+.idea/
+env/
 # C extensions
 *.so
 
