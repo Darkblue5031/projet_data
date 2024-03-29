@@ -12,19 +12,18 @@ def location(request):
     return HttpResponse('<h1>location<h1>')
 
 def index(request):
-    genders = Data.objects.values_list('Gender', flat=True)
-    ages = Data.objects.values_list("Age", flat=True)
+    genders = (Data.objects.values_list("Gender", flat=True))
+    ages = (Data.objects.values_list("Age", flat=True))
+    maritals_status = (Data.objects.values_list("Marital_Status", flat=True))
 
-    num_books = 15
-    num_instances = 20
-
-    print(ages)
-    print(genders)
+    Age_average = Data.average(Data.Age.field.name)
+    Age_min = Data.min(Data.Age.field.name)
 
     context = {
-        'num_books': num_books,
-        'num_instances': num_instances,
         'genders': genders,
         'ages': ages,
+        'maritals_status': maritals_status,
+        'Age_average': Age_average,
+        'Age_min': Age_min,
     }
     return render(request, 'html/test.html', context=context)
