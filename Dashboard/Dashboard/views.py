@@ -28,4 +28,4 @@ def index(request):
         'Age_min': Age_min,
         'Age_median': Age_median,
     }
-    return render(request, 'html/test.html', context=context)
+    return render(request, 'html/base.html', context=context)
