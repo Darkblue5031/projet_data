@@ -27,4 +27,4 @@ def index(request):
         'genders': genders,
         'ages': ages,
     }
-    return render(request, 'html/test.html', context=context)
+    return render(request, 'html/base.html', context=context)
