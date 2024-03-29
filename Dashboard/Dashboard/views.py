@@ -20,6 +20,8 @@ def index(request):
     Age_min = Data.min(Data.Age.field.name)
     Age_median = Data.median(Data.objects.values_list("Age", flat=True))
 
+    ratio_male = Data.ratio(Data.objects.values_list("Gender", flat=True), "Male")
+
     context = {
         'genders': genders,
         'ages': ages,
@@ -27,5 +29,6 @@ def index(request):
         'Age_average': Age_average,
         'Age_min': Age_min,
         'Age_median': Age_median,
+        'ratio_male' : ratio_male,
     }
-    return render(request, 'html/base.html', context=context)
+    return render(request, 'html/test.html', context=context)

@@ -50,6 +50,14 @@ class Data(models.Model):
             mid = count // 2
             return (values[mid - 1] + values[mid]) / 2.0
 
+    @classmethod
+    def ratio(cls, column, value):
+        values = column.filter(Gender=value)
+        count = Data.count(column)
+
+        return round(len(values) / count, 2)
+
+
     def __str__(self):
         return f"{self.Gender} - {self.Age}"
 
