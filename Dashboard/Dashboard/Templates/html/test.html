@@ -1,0 +1,32 @@
+<!-- Dans test.html de votre dossier templates -->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<body>
+    <h2>Genders</h2>
+    <ul>
+        {% for gender in genders %}
+            <li>{{ gender }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Age</h2>
+     <ul>
+        {% for age in ages %}
+            <li>{{ age }}</li>
+        {% endfor %}
+    </ul>
+    <ul>
+        {% for entry in context %}
+            <tr>
+                <td>{{ entry.gender }}</td>
+                <td>{{ entry.age }}</td>
+            </tr>
+        {% endfor %}
+    </ul>
+</body>
+</html>
