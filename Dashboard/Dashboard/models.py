@@ -1,6 +1,7 @@
 from django.db import models
 import django.db.models as mod
 
+
 class Data(models.Model):
     Age = models.IntegerField()
     Gender = models.CharField(max_length=100)
@@ -16,33 +17,32 @@ class Data(models.Model):
     Feedback = models.CharField(max_length=100)
     M = models.BooleanField()
 
+
     @classmethod
-    def average(cls, column):
+    def Average(cls, column):
         return cls.objects.aggregate(avg=mod.Avg(column))['avg']
 
     @classmethod
-    def sum(cls, column):
+    def Sum(cls, column):
         return cls.objects.aggregate(sum=mod.Sum(column))['sum']
 
     @classmethod
-    def count(cls, column):
+    def Count(cls, column):
         return cls.objects.aggregate(count=mod.Count(column))['count']
 
     @classmethod
-    def min(cls, column):
+    def Min(cls, column):
         return cls.objects.aggregate(min=mod.Min(column))['min']
 
     @classmethod
-    def max(cls, column):
+    def Max(cls, column):
         return cls.objects.aggregate(max=mod.Max(column))['max']
 
     @classmethod
-    def median(cls, column):
+    def Median(cls, column):
 
-        count = Data.count(column)
+        count = Data.Count(column)
         values = sorted(column)
-
-        print(f"value : { column }")
 
         if count % 2 == 1:
             return values[count // 2]
@@ -51,12 +51,26 @@ class Data(models.Model):
             return (values[mid - 1] + values[mid]) / 2.0
 
     @classmethod
-    def ratio(cls, column, value):
-        values = column.filter(Gender=value)
-        count = Data.count(column)
+    def Ratio(cls, column, value):
+        all_data = Data.objects.all()
 
-        return round(len(values) / count, 2)
+        filtered_data = all_data.filter(**{column: value})
+        print(str(filtered_data.query))
 
+        count = filtered_data.count()
+
+        return round(count / all_data.count(), 2)
+
+    @classmethod
+    def Sup_than(cls, column, value):
+        column = f"{column}__gt"
+        all_data = Data.objects.all()
+
+        filtered_data = all_data.filter(**{column: value})
+        print(str(filtered_data.query))
+        count = filtered_data.count()
+
+        return round(count / all_data.count(), 2)
 
     def __str__(self):
         return f"{self.Gender} - {self.Age}"
