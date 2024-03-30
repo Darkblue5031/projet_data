@@ -51,19 +51,12 @@ class Data(models.Model):
             return (values[mid - 1] + values[mid]) / 2.0
 
     @classmethod
-    def Ratio(cls, column, value):
-        all_data = Data.objects.all()
+    def Ratio_conditional(cls, column, value, ope=None):
+        if ope == "sup":
+            column = f"{column}__gt"
+        elif ope == "inf" :
+            column = f"{column}__lt"
 
-        filtered_data = all_data.filter(**{column: value})
-        print(str(filtered_data.query))
-
-        count = filtered_data.count()
-
-        return round(count / all_data.count(), 2)
-
-    @classmethod
-    def Sup_than(cls, column, value):
-        column = f"{column}__gt"
         all_data = Data.objects.all()
 
         filtered_data = all_data.filter(**{column: value})

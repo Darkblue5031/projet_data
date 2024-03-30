@@ -2,18 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Data
 
-
 def about(request):
     return HttpResponse('<h1>This is about me!.</h1>')
-
 
 def podium(request):
     return HttpResponse('<h1>podiuuuuuuuuu<h1>')
 
-
 def location(request):
     return HttpResponse('<h1>location<h1>')
-
 
 def index(request):
     genders = Data.objects.values_list("Gender", flat=True)
@@ -26,14 +22,14 @@ def index(request):
     longitudes = Data.objects.values_list("Longitude", flat=True)
     postal_codes = Data.objects.values_list("Postal_Code", flat=True)
     feedbacks = Data.objects.values_list("Feedback", flat=True)
-    #families_size = Data.objects.values_list("Family_Size", flat=True)
+    families_size = Data.objects.values_list("Family_Size", flat=True)
 
     Age_average = Data.Average(Data.Age.field.name)
     Age_min = Data.Min(Data.Age.field.name)
     Age_median = Data.Median(Data.objects.values_list("Age", flat=True))
 
-    ratio_male = Data.Ratio("Gender", "Male")
-    family_3 = Data.Sup_than("Latitude", 3.0)
+    ratio_male = Data.Ratio_conditional("Gender", "Male")
+    family_3 = Data.Ratio_conditional("Latitude", 3.0, "sup")
 
     context = {
         'genders': genders,
@@ -42,7 +38,7 @@ def index(request):
         'occupations': occupations,
         'monthly_income': Monthly_income,
         'educational_qualification': Educational_qualification,
-        #'families_size': families_size,
+        'families_size': families_size,
         'latitudes': latitudes,
         'longitudes': longitudes,
         'pin_codes': postal_codes,
