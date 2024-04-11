@@ -2,17 +2,22 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Data
 
+
 def about(request):
     return HttpResponse('<h1>This is about me!.</h1>')
+
 
 def podium(request):
     return HttpResponse('<h1>podiuuuuuuuuu<h1>')
 
+
 def location(request):
     return HttpResponse('<h1>location<h1>')
 
+
 from django.shortcuts import render
 import csv
+
 
 def index(request):
     # Open the CSV file
