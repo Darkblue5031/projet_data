@@ -53,6 +53,15 @@
     <input type="hidden" name="filter" value="description">
     <button type="submit">Search by Description</button>
 </form>
+
+<div>
+    {{ pie_chart_html|safe }}
+</div>
+
+<div>
+    {{ heatmap_html|safe }}
+</div>
+
 <table>
     <thead>
     <tr>
