@@ -9,6 +9,8 @@ def about(request):
 def podium(request):
     return HttpResponse('<h1>podiuuuuuuuuu<h1>')
 
+def location(request):
+    return HttpResponse('<h1>location<h1>')
 
 def index(request):
     context = {
