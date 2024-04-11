@@ -20,15 +20,19 @@ import csv
 
 
 def index(request):
-    # Open the CSV file
+    """
+    Index page view
+    :param request:
+    :return:
+    """
     with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
-
-        # Read the CSV data into a list of dictionaries
         data = [row for row in reader]
-
-    # Sort the data by the 'title' key
-    sorted_data = sorted(data, key=lambda x: x['title'])
-
-    # Pass the sorted data to the template
-    return render(request, 'html/test.html', {'sorted_data': sorted_data})
+    if request.method == 'POST':
+        filt = request.POST.get('filter')
+        if not filt:
+            filt = 'title'
+        sorted_data = sorted(data, key=lambda x: x[filt])
+    else:
+        sorted_data = sorted(data, key=lambda x: x['title'])
+    return render(request, 'html/test.html', {'sorted_data': sorted_data[:10]})

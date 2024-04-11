@@ -5,41 +5,89 @@
     <title>Netflix Titles</title>
 </head>
 <body>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Type</th>
-                <th>Title</th>
-                <th>Director</th>
-                <th>Cast</th>
-                <th>Country</th>
-                <th>Date Added</th>
-                <th>Release Year</th>
-                <th>Rating</th>
-                <th>Duration</th>
-                <th>Listed In</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in sorted_data %}
-            <tr>
-                <td>{{ row.show_id }}</td>
-                <td>{{ row.type }}</td>
-                <td>{{ row.title }}</td>
-                <td>{{ row.director }}</td>
-                <td>{{ row.cast }}</td>
-                <td>{{ row.country }}</td>
-                <td>{{ row.date_added }}</td>
-                <td>{{ row.release_year }}</td>
-                <td>{{ row.rating }}</td>
-                <td>{{ row.duration }}</td>
-                <td>{{ row.listed_in }}</td>
-                <td>{{ row.description }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="director">
+    <button type="submit">Search by Director</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="show_id">
+    <button type="submit">Search by Show Id</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="type">
+    <button type="submit">Search by type</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="title">
+    <button type="submit">Search by Title</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="cast">
+    <button type="submit">Search by Cast</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="country">
+    <button type="submit">Search by Country</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="date_added">
+    <button type="submit">Search by Date Added</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="release_year">
+    <button type="submit">Search by Release Year</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="rating">
+    <button type="submit">Search by Rating</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="duration">
+    <button type="submit">Search by Duration</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="listed_in">
+    <button type="submit">Search by Listed in</button>
+</form>
+<form method="post"> {% csrf_token %}
+    <input type="hidden" name="filter" value="description">
+    <button type="submit">Search by Description</button>
+</form>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Title</th>
+        <th>Director</th>
+        <th>Cast</th>
+        <th>Country</th>
+        <th>Date Added</th>
+        <th>Release Year</th>
+        <th>Rating</th>
+        <th>Duration</th>
+        <th>Listed In</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in sorted_data %}
+    <tr>
+        <td>{{ row.show_id }}</td>
+        <td>{{ row.type }}</td>
+        <td>{{ row.title }}</td>
+        <td>{{ row.director }}</td>
+        <td>{{ row.cast }}</td>
+        <td>{{ row.country }}</td>
+        <td>{{ row.date_added }}</td>
+        <td>{{ row.release_year }}</td>
+        <td>{{ row.rating }}</td>
+        <td>{{ row.duration }}</td>
+        <td>{{ row.listed_in }}</td>
+        <td>{{ row.description }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 </body>
 </html>
