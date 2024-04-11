@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <title>Netflix Titles</title>
 </head>
+<div class="navbar" >
+    <div class="navbar-inner">
+        <a class="global" aria-label="Global" title="Global" href={"/test"}>
+            Global
+        </a>
+        <a class="films" aria-label="Films" title="Films" href={"/films"}>
+            Films
+        </a>
+        <a class="series" aria-label="Series" title="Series" href={"/series"}>
+            Séries
+        </a>
+    </div>
+</div>
 <body>
 <form method="post"> {% csrf_token %}
     <input type="hidden" name="filter" value="director">

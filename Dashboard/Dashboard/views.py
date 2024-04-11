@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Data
+from django.template import loader
 from collections import Counter
 import plotly.express as px
 import plotly.graph_objs as go

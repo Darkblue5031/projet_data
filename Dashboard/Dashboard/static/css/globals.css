@@ -1,0 +1,13 @@
+:root {
+    --Primary: #E4101F;
+    --Secondary: #AD0C11;
+    --Background: #211C19;
+    --Fonts: #FAFAFA;
+}
+
+body {
+    font-family: "Source Sans Pro Semibold", "Source Sans Pro Light", serif;
+    color: rgb(var(--Fonts));
+    font-size: 20px;
+    background: rgb(var(--Background));
+}
