@@ -7,6 +7,7 @@ import plotly.graph_objs as go
 import plotly.io as pio
 import pandas as pd
 
+
 def about(request):
     return HttpResponse('<h1>This is about me!.</h1>')
 
@@ -45,10 +46,20 @@ def generate_pie_chart(data):
     return pie_chart_html
 
 
-def generate_choropleth_map(data):
+def generate_choropleth_map(data: list[dict[str, str]]):
     # Utilisez Counter pour compter les occurrences de chaque pays
-    country_counts = Counter(entry['country'] for entry in data if entry['country'] != '')
+    country_counts = Counter()
 
+    # Parcourir chaque entrée dans les données
+    for entry in data:
+        countries_string = entry.get('country', '')
+        if countries_string:  # Vérifier si la chaîne de pays n'est pas vide
+            # Diviser les noms de pays en une liste de pays individuels
+            countries = [country.strip() for country in countries_string.split(',')]
+            # Mettre à jour le compteur avec les pays individuels
+            country_counts.update(countries)
+
+    print(country_counts)
     # Créez une dataframe à partir des données de pays et de leurs occurrences
     df = pd.DataFrame(list(country_counts.items()), columns=['country', 'country_values'])
 
@@ -59,7 +70,7 @@ def generate_choropleth_map(data):
                         color='country_values',  # colonne contenant les valeurs à colorier
                         hover_name='country',  # colonne à afficher lors du survol
                         color_continuous_scale=px.colors.sequential.Plasma,
-                        range_color=(0, 100),  # plage de couleurs
+                        range_color=(0, 500),  # plage de couleurs
                         title='Netflix Titles by Country')
 
     # Convertir la figure en HTML
@@ -84,7 +95,9 @@ def index(request):
     else:
         sorted_data = sorted(data, key=lambda x: x['title'])
 
+
     pie_chart_html = generate_pie_chart(sorted_data)
     heatmap_html = generate_choropleth_map(sorted_data)
 
-    return render(request, 'html/test.html', {'sorted_data': sorted_data[:10], 'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html})
+    return render(request, 'html/test.html',
+                  {'sorted_data': sorted_data[:10], 'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html})
