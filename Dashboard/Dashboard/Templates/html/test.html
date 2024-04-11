@@ -1,33 +1,23 @@
-<!-- Dans test.html de votre dossier templates -->
-
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
+    <title>Données CSV</title>
 </head>
 <body>
-    <h2>Genders</h2>
-
-    <ul>
-        {% for fam in family %}
-            <li>{{ fam }}</li>
+<h1>Données CSV</h1>
+<table>
+    <tr>
+        {% for header in headers %}
+        <th>{{ header }}</th>
         {% endfor %}
-    </ul>
-    <h2>Age</h2>
-     <ul>
-        {% for age in ages %}
-            <li>{{ age }}</li>
+    </tr>
+    {% for row in data %}
+    <tr>
+        {% for header in headers %}
+        <td>{{ row|default_if_none:""|default:header }}</td>
         {% endfor %}
-    </ul>
-    <ul>
-        {% for entry in context %}
-            <tr>
-                <td>{{ entry.gender }}</td>
-                <td>{{ entry.age }}</td>
-            </tr>
-        {% endfor %}
-    </ul>
+    </tr>
+    {% endfor %}
+</table>
 </body>
 </html>
