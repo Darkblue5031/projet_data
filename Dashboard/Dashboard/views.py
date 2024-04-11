@@ -47,23 +47,16 @@ def generate_pie_chart(data):
 
 
 def generate_choropleth_map(data: list[dict[str, str]]):
-    # Utilisez Counter pour compter les occurrences de chaque pays
     country_counts = Counter()
 
-    # Parcourir chaque entrée dans les données
     for entry in data:
         countries_string = entry.get('country', '')
-        if countries_string:  # Vérifier si la chaîne de pays n'est pas vide
-            # Diviser les noms de pays en une liste de pays individuels
+        if countries_string:
             countries = [country.strip() for country in countries_string.split(',')]
-            # Mettre à jour le compteur avec les pays individuels
             country_counts.update(countries)
 
-    print(country_counts)
-    # Créez une dataframe à partir des données de pays et de leurs occurrences
     df = pd.DataFrame(list(country_counts.items()), columns=['country', 'country_values'])
 
-    # Utilisez Plotly Express pour créer la carte choroplèthe
     fig = px.choropleth(df,
                         locations='country',  # colonne contenant les noms des pays
                         locationmode='country names',
@@ -73,7 +66,6 @@ def generate_choropleth_map(data: list[dict[str, str]]):
                         range_color=(0, 500),  # plage de couleurs
                         title='Netflix Titles by Country')
 
-    # Convertir la figure en HTML
     map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False, default_width="100%", default_height="100%")
     return map_html
 
@@ -94,7 +86,6 @@ def index(request):
         sorted_data = sorted(data, key=lambda x: x[filt])
     else:
         sorted_data = sorted(data, key=lambda x: x['title'])
-
 
     pie_chart_html = generate_pie_chart(sorted_data)
     heatmap_html = generate_choropleth_map(sorted_data)
