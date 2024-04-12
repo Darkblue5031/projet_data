@@ -41,7 +41,12 @@ def generate_pie_chart(data):
     long_count = sum(1 for duration in durations_in_minutes if duration is not None and duration > 120)
     values = [short_count, medium_count, long_count]
 
-    fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values)],
+                layout=go.Layout(
+                    paper_bgcolor='#211C19',
+                    plot_bgcolor='#211C19',
+                    font=dict(color='#FAFAFA'),
+                ))
     pie_chart_html = fig.to_html(full_html=False)
     return pie_chart_html
 
@@ -61,7 +66,13 @@ def generate_choropleth_map(data):
                         hover_name='country',  # colonne à afficher lors du survol
                         color_continuous_scale=px.colors.sequential.Plasma,
                         range_color=(0, 100),  # plage de couleurs
-                        title='Netflix Titles by Country')
+                        title='Netflix Titles by Country',
+                        )
+    fig.update_layout(
+        paper_bgcolor='#211C19',
+        plot_bgcolor='#211C19',
+        font=dict(color='#FAFAFA'),
+    )
 
     # Convertir la figure en HTML
     map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False, default_width="100%", default_height="100%")

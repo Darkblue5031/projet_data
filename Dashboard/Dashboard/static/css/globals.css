@@ -7,7 +7,12 @@
 
 body {
     font-family: "Source Sans Pro Semibold", "Source Sans Pro Light", serif;
-    color: rgb(var(--Fonts));
+    color: var(--Fonts);
     font-size: 20px;
-    background: rgb(var(--Background));
+    background: var(--Background);
+}
+
+a {
+    color: var(--Fonts);
+    text-decoration: none;
 }
