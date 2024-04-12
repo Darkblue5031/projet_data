@@ -41,7 +41,7 @@ def generate_pie_chart(data):
     long_count = sum(1 for duration in durations_in_minutes if duration is not None and duration > 120)
     values = [short_count, medium_count, long_count]
 
-    fig = go.Figure(data=[go.Pie(labels=labels, values=values)],
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values, marker=dict(colors=['#E4101F', '#AD0C11', '#960c10']))],
                 layout=go.Layout(
                     paper_bgcolor='#211C19',
                     plot_bgcolor='#211C19',
@@ -64,7 +64,7 @@ def generate_choropleth_map(data):
                         locationmode='country names',
                         color='country_values',  # colonne contenant les valeurs à colorier
                         hover_name='country',  # colonne à afficher lors du survol
-                        color_continuous_scale=px.colors.sequential.Plasma,
+                        color_continuous_scale=['#E4101F', '#960c10', '#211C19'],
                         range_color=(0, 100),  # plage de couleurs
                         title='Netflix Titles by Country',
                         )
