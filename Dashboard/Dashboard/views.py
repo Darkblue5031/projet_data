@@ -46,6 +46,7 @@ def generate_pie_chart(data):
                     paper_bgcolor='#211C19',
                     plot_bgcolor='#211C19',
                     font=dict(color='#FAFAFA'),
+                    title='Netflix average duration',
                 ))
     pie_chart_html = fig.to_html(full_html=False)
     return pie_chart_html
