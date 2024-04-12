@@ -1,6 +1,4 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Data
 from collections import Counter
 import plotly.express as px
 import plotly.graph_objs as go
@@ -47,25 +45,41 @@ def generate_pie_chart(data):
 
 
 def generate_choropleth_map(data: list[dict[str, str]]):
+    # Utilisez Counter pour compter les occurrences de chaque pays
     country_counts = Counter()
 
+    # Parcourir chaque entrée dans les données
     for entry in data:
         countries_string = entry.get('country', '')
-        if countries_string:
+        if countries_string:  # Vérifier si la chaîne de pays n'est pas vide
+            # Diviser les noms de pays en une liste de pays individuels
             countries = [country.strip() for country in countries_string.split(',')]
+            # Mettre à jour le compteur avec les pays individuels
             country_counts.update(countries)
 
+    # Créez une dataframe à partir des données de pays et de leurs occurrences
     df = pd.DataFrame(list(country_counts.items()), columns=['country', 'country_values'])
+
+    # Utilisez Plotly Express pour créer la carte choroplèthe
+    custom_color_scale = [
+        (0.00, "rgb(0, 0, 255)"),  # Blue
+        (0.01, "rgb(0, 255, 255)"),  # Cyan
+        (0.10, "rgb(0, 255, 0)"),  # Green
+        (0.15, "rgb(255, 255, 0)"),  # Yellow
+        (1.00, "rgb(255, 0, 0)")  # Red
+    ]
 
     fig = px.choropleth(df,
                         locations='country',  # colonne contenant les noms des pays
                         locationmode='country names',
                         color='country_values',  # colonne contenant les valeurs à colorier
                         hover_name='country',  # colonne à afficher lors du survol
-                        color_continuous_scale=px.colors.sequential.Plasma,
+                        color_continuous_scale=custom_color_scale,
                         range_color=(0, 500),  # plage de couleurs
+                        color_continuous_midpoint=50,
                         title='Netflix Titles by Country')
 
+    # Convertir la figure en HTML
     map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False, default_width="100%", default_height="100%")
     return map_html
 
@@ -91,4 +105,4 @@ def index(request):
     heatmap_html = generate_choropleth_map(sorted_data)
 
     return render(request, 'html/test.html',
-                  {'sorted_data': sorted_data[:10], 'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html})
+                  {'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html})
