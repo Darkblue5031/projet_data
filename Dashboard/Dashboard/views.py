@@ -44,13 +44,64 @@ def generate_pie_chart(data):
     return pie_chart_html
 
 
-def generate_choropleth_map(data: list[dict[str, str]]):
+def generate_choropleth_map_duration(data: list[dict[str, str]], type: str = "Movie"):
+    # Utilisez Counter pour compter la somme des durées de visionnage par pays
+    country_durations = Counter()
+
+    # Parcourir chaque entrée dans les données
+    for entry in data:
+        if entry.get('type', '') != type:
+            continue
+        countries_string = entry.get("country", '')
+        if countries_string:  # Vérifier si la chaîne de pays n'est pas vide
+            # Diviser les noms de pays en une liste de pays individuels
+            countries = [country.strip() for country in countries_string.split(',')]
+            # Somme des durées de visionnage pour chaque pays
+            duration = entry.get('duration', '')
+            if duration:
+                minutes = convert_to_minutes(duration)
+                for country in countries:
+                    if country == 'Soviet Union':
+                        country_durations["Russia"] += minutes
+                    else:
+                        country_durations[country] += minutes
+
+    # Calcul de la durée moyenne de visionnage par pays
+    country_avg_durations = {}
+    for country, total_duration in country_durations.items():
+        count_titles = sum(1 for entry in data if country in entry.get("country", '') and entry.get('type', '') == type)
+        if country == 'Russia' and type == 'Movie':
+            count_titles += 3
+        avg_duration = total_duration / count_titles if count_titles > 0 else 0
+        if country == 'Russia':
+            print(total_duration, count_titles, avg_duration)
+
+        country_avg_durations[country] = avg_duration
+
+    # Créer un DataFrame à partir des données de durée moyenne de visionnage par pays
+    df = pd.DataFrame(list(country_avg_durations.items()), columns=['country', 'avg_duration'])
+
+    fig = px.choropleth(df,
+                        locations='country',  # colonne contenant les noms des pays
+                        locationmode='country names',
+                        color='avg_duration',  # colonne contenant les valeurs à colorier
+                        hover_name='country',  # colonne à afficher lors du survol
+                        color_continuous_scale=px.colors.sequential.Plasma,
+                        title="country average duration",
+                        range_color=(0, max(df['avg_duration']))
+                        )
+
+    # Convertir la figure en HTML
+    map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False, default_width="100%", default_height="100%")
+    return map_html
+
+def generate_choropleth_map(data: list[dict[str, str]], title: str = 'Netflix Titles by Country', col: str = "country"):
     # Utilisez Counter pour compter les occurrences de chaque pays
     country_counts = Counter()
 
     # Parcourir chaque entrée dans les données
     for entry in data:
-        countries_string = entry.get('country', '')
+        countries_string = entry.get(col, '')
         if countries_string:  # Vérifier si la chaîne de pays n'est pas vide
             # Diviser les noms de pays en une liste de pays individuels
             countries = [country.strip() for country in countries_string.split(',')]
@@ -70,14 +121,14 @@ def generate_choropleth_map(data: list[dict[str, str]]):
     ]
 
     fig = px.choropleth(df,
-                        locations='country',  # colonne contenant les noms des pays
+                        locations=col,  # colonne contenant les noms des pays
                         locationmode='country names',
                         color='country_values',  # colonne contenant les valeurs à colorier
-                        hover_name='country',  # colonne à afficher lors du survol
+                        hover_name=col,  # colonne à afficher lors du survol
                         color_continuous_scale=custom_color_scale,
                         range_color=(0, 500),  # plage de couleurs
                         color_continuous_midpoint=50,
-                        title='Netflix Titles by Country')
+                        title=title)
 
     # Convertir la figure en HTML
     map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False, default_width="100%", default_height="100%")
@@ -90,7 +141,7 @@ def index(request):
     :param request:
     :return:
     """
-    with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
+    with open('netflix_coord.csv', newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
         data = [row for row in reader]
     if request.method == 'POST':
@@ -103,6 +154,7 @@ def index(request):
 
     pie_chart_html = generate_pie_chart(sorted_data)
     heatmap_html = generate_choropleth_map(sorted_data)
+    duration_map = generate_choropleth_map_duration(sorted_data)
 
     return render(request, 'html/test.html',
-                  {'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html})
+                  {'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html, 'duration_map': duration_map})
