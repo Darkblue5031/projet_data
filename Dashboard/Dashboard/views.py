@@ -43,7 +43,6 @@ def generate_pie_chart(data):
 
     colors = ['#2ca02c', '#ffaa00', '#eb4034']
 
-
     fig = go.Figure(data=[go.Pie(labels=labels, values=values, marker=dict(colors=colors))])
     pie_chart_html = fig.to_html(full_html=False)
     return pie_chart_html
@@ -100,6 +99,7 @@ def generate_choropleth_map_duration(data: list[dict[str, str]], type: str = "Mo
     map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False, default_width="100%", default_height="100%")
     return map_html
 
+
 def generate_choropleth_map(data: list[dict[str, str]], title: str = 'Netflix Titles by Country', col: str = "country"):
     # Utilisez Counter pour compter les occurrences de chaque pays
     country_counts = Counter()
@@ -126,37 +126,13 @@ def generate_choropleth_map(data: list[dict[str, str]], title: str = 'Netflix Ti
                         color='country_values',  # colonne contenant les valeurs à colorier
                         hover_name=col,  # colonne à afficher lors du survol
                         color_continuous_scale=custom_color_scale,
-                        range_color=(0,500),  # plage de couleurs
+                        range_color=(0, 500),  # plage de couleurs
                         color_continuous_midpoint=50,
                         title=title)
 
     map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False, default_width="100%", default_height="100%")
     return map_html
 
-
-def index(request):
-    """
-    Index page view
-    :param request:
-    :return:
-    """
-    with open('netflix_coord.csv', newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        data = [row for row in reader]
-    if request.method == 'POST':
-        filt = request.POST.get('filter')
-        if not filt:
-            filt = 'title'
-        sorted_data = sorted(data, key=lambda x: x[filt])
-    else:
-        sorted_data = sorted(data, key=lambda x: x['title'])
-
-    pie_chart_html = generate_pie_chart(sorted_data)
-    heatmap_html = generate_choropleth_map(sorted_data)
-    duration_map = generate_choropleth_map_duration(sorted_data)
-
-    return render(request, 'html/test.html',
-                  {'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html, 'duration_map': duration_map})
 
 def duration_pie_chart(request):
     """
@@ -202,3 +178,28 @@ def director_bar_chart(request):
     bar_chart_html = generate_director_bar_chart(data)
 
     return render(request, 'html/director_bar_chart.html', {'bar_chart_html': bar_chart_html})
+
+
+def index(request):
+    """
+    Index page view
+    :param request:
+    :return:
+    """
+    with open('netflix_coord.csv', newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile)
+        data = [row for row in reader]
+    if request.method == 'POST':
+        filt = request.POST.get('filter')
+        if not filt:
+            filt = 'title'
+        sorted_data = sorted(data, key=lambda x: x[filt])
+    else:
+        sorted_data = sorted(data, key=lambda x: x['title'])
+
+    pie_chart_html = generate_pie_chart(sorted_data)
+    heatmap_html = generate_choropleth_map(sorted_data)
+    duration_map = generate_choropleth_map_duration(sorted_data)
+
+    return render(request, 'html/test.html',
+                  {'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html, 'duration_map': duration_map})
