@@ -1,0 +1,81 @@
+.navbar {
+    width: 100%;
+    height: 7%;
+    display: flex;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+}
+
+.navbar-inner {
+    background: var(--Background);
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 2px 2px 7px 2px rgba(5,5,5,0.92);
+    justify-content: center;
+    align-items: center;
+    gap: 10%;
+}
+
+.sort {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    gap: 1%;
+    margin-bottom: 2%;
+}
+
+.dash {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5%;
+}
+
+.chart {
+    width: 35%;
+    height: 35%;
+}
+
+.heatMap {
+    width: 35%;
+    height: 35%;
+}
+
+.logo {
+    width: 100px;
+    height: 45px;
+    margin-left: 5%;
+    position: absolute;
+    left: 0px;
+
+}
+
+.table {
+    color: transparent;
+}
+
+button {
+    background: var(--Primary);
+    color: var(--Fonts);
+    text-align: center;
+    font-family: "Source Sans Pro Semibold", serif;
+    font-size: 16px;
+    border-radius: 15px;
+    box-shadow: 0px 2px 7px 0px rgba(5,5,5,0.92);
+    align-items: center;
+    border-color: transparent;
+}
+
+button:hover {
+    background: var(--Secondary);
+}
+
+button:active {
+    background: #960c10;
+}
