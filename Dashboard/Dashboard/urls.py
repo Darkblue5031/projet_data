@@ -23,4 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('about/', views.about, name='test'),
     path('podium/', views.podium),
+    path('location/', views.location),
+    path('duration_pie_chart/', views.duration_pie_chart, name='duration_pie_chart'),
+    path('director_bar_chart/', views.director_bar_chart, name='director_bar_chart'),
 ]
