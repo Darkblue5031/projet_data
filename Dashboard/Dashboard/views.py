@@ -1,45 +1,113 @@
-from django.shortcuts import render
+"""
+Views for the dashboard app.
+"""
+
+from csv import DictReader
 from django.http import HttpResponse
-from .models import Data
-from django.template import loader
-from collections import Counter
-import plotly.express as px
-import plotly.graph_objs as go
-import plotly.io as pio
-import pandas as pd
+from django.shortcuts import render
+from . import func
+
 
 def about(request):
-    return HttpResponse('<h1>This is about me!.</h1>')
+    """
+    View to display about me.
+    :param request:
+    :return:
+    """
+    return HttpResponse("<h1>This is about me!.</h1>")
 
 
 def podium(request):
-    return HttpResponse('<h1>podiuuuuuuuuu<h1>')
+    """
+    View to display podium.
+    :param request:
+    :return:
+    """
+    return HttpResponse("<h1>podiuuuuuuuuu<h1>")
 
 
 def location(request):
-    return HttpResponse('<h1>location<h1>')
+    """
+    View to display location.
+    :param request:
+    :return:
+    """
+    return HttpResponse("<h1>location<h1>")
 
 
-from django.shortcuts import render
-import csv
+def duration_pie_chart(request):
+    """
+    View to display pie chart based on duration/count.
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+
+    pie_chart_html = func.generate_pie_chart(data)
+
+    return render(
+        request, "html/duration_pie_chart.html", {"pie_chart_html": pie_chart_html}
+    )
 
 
-def convert_to_minutes(duration):
-    if 'min' in duration:
-        return int(duration.split()[0])
-    elif 'Season' in duration:
-        # Supposons que chaque saison a une durée moyenne de 12 épisodes de 45 minutes chacun
-        return int(duration.split()[0]) * 12 * 45
+def director_bar_chart(request):
+    """
+    View to display bar chart based on count of titles per director.
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
 
+    bar_chart_html = func.generate_director_bar_chart(data)
+
+    return render(
+        request, "html/director_bar_chart.html", {"bar_chart_html": bar_chart_html}
+    )
+
+
+def cast_bar_chart(request):
+    """
+    View to display bar chart based on count of titles per cast.
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+
+    bar_chart_html = func.generate_cast_bar_chart(data)
+    bar_chart_html1 = func.generate_cast_bar_chart(data, typ="TV Show")
+    bar_chart_html2 = func.generate_cast_duration_bar_chart(data)
+    bar_chart_html3 = func.generate_cast_duration_bar_chart(data, typ="TV Show")
+
+    return render(
+        request,
+        "html/cast_bar_chart.html",
+        {
+            "bar_chart_html": bar_chart_html,
+            "bar_chart_html1": bar_chart_html1,
+            "bar_chart_html2": bar_chart_html2,
+            "bar_chart_html3": bar_chart_html3,
+        },
+    )
 
 def generate_pie_chart(data):
     durations_in_minutes = [convert_to_minutes(entry['duration']) for entry in data]
 
-    labels = ['Short (< 60 min)', 'Medium (60-120 min)', 'Long (> 120 min)']
-    short_count = sum(1 for duration in durations_in_minutes if duration is not None and duration < 60)
-    medium_count = sum(1 for duration in durations_in_minutes if duration is not None and 60 <= duration <= 120)
-    long_count = sum(1 for duration in durations_in_minutes if duration is not None and duration > 120)
-    values = [short_count, medium_count, long_count]
+def cast_line_chart(request):
+    """
+    View to display line chart based on count of titles per cast.
+    :param request:
+    :return:
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+    line_chart_html = func.generate_release_year_line_chart(data)
+    line_chart_html1 = func.generate_release_year_line_chart(data, typ="TV Show")
+    return render(
+        request,
+        "html/cast_line_chart.html",
+        {"line_chart_html": line_chart_html, "line_chart_html1": line_chart_html1},
+    )
 
     fig = go.Figure(data=[go.Pie(labels=labels, values=values, marker=dict(colors=['#E4101F', '#AD0C11', '#960c10']))],
                 layout=go.Layout(
@@ -51,10 +119,25 @@ def generate_pie_chart(data):
     pie_chart_html = fig.to_html(full_html=False)
     return pie_chart_html
 
+def cast_circular_chart(request):
+    """
 
-def generate_choropleth_map(data):
-    # Utilisez Counter pour compter les occurrences de chaque pays
-    country_counts = Counter(entry['country'] for entry in data if entry['country'] != '')
+    :param request:
+    :return:
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+    circular_chart_html = func.generate_listed_in_circular_chart(data)
+    circular_chart_html1 = func.generate_listed_in_circular_chart(data, typ="TV Show")
+    return render(
+        request,
+        "html/cast_circular_chart.html",
+        {
+            "circular_chart_html": circular_chart_html,
+            "circular_chart_html1": circular_chart_html1,
+        },
+    )
 
     # Créez une dataframe à partir des données de pays et de leurs occurrences
     df = pd.DataFrame(list(country_counts.items()), columns=['country', 'country_values'])
@@ -75,9 +158,22 @@ def generate_choropleth_map(data):
         font=dict(color='#FAFAFA'),
     )
 
-    # Convertir la figure en HTML
-    map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False, default_width="100%", default_height="100%")
-    return map_html
+def duration_line_chart(request):
+    """
+    View to display line chart based on duration/count.
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+
+    line_chart_html = func.generate_duration_line_chart(data)
+    line_chart_html1 = func.generate_duration_line_chart(data, typ="TV Show")
+
+    return render(
+        request,
+        "html/duration_line_chart.html",
+        {"line_chart_html": line_chart_html, "line_chart_html1": line_chart_html1},
+    )
 
 
 def index(request):
@@ -86,18 +182,27 @@ def index(request):
     :param request:
     :return:
     """
-    with open('netflix_titles.csv', newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-        data = [row for row in reader]
-    if request.method == 'POST':
-        filt = request.POST.get('filter')
+    with open("netflix_coord.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+    if request.method == "POST":
+        filt = request.POST.get("filter")
         if not filt:
-            filt = 'title'
+            filt = "title"
         sorted_data = sorted(data, key=lambda x: x[filt])
     else:
-        sorted_data = sorted(data, key=lambda x: x['title'])
+        sorted_data = sorted(data, key=lambda x: x["title"])
 
-    pie_chart_html = generate_pie_chart(sorted_data)
-    heatmap_html = generate_choropleth_map(sorted_data)
+    pie_chart_html = func.generate_pie_chart(sorted_data)
+    heatmap_html = func.generate_choropleth_map(sorted_data)
+    duration_map = func.generate_choropleth_map_duration(sorted_data)
 
-    return render(request, 'html/test.html', {'sorted_data': sorted_data[:10], 'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html})
+    return render(
+        request,
+        "html/test.html",
+        {
+            "pie_chart_html": pie_chart_html,
+            "heatmap_html": heatmap_html,
+            "duration_map": duration_map,
+        },
+    )

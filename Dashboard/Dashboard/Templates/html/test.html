@@ -1,11 +1,14 @@
 {% load static %}
+<!-- Dans test.html de votre dossier templates -->
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Netflix Titles</title>
     <link rel="stylesheet" href="static/css/globals.css">
     <link rel="stylesheet" href="static/css/pie_chart.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
 </head>
 <div class="navbar" >
     <div class="navbar-inner">
@@ -119,5 +122,24 @@
 <!--        {% endfor %}-->
 <!--        </tbody>-->
 <!--    </table>-->
+<div>
+    {{ duration_map|safe }}
+</div>
+
+<!--<h1>Données CSV</h1>-->
+<!--<table>-->
+<!--    <tr>-->
+<!--        {% for header in headers %}-->
+<!--        <th>{{ header }}</th>-->
+<!--        {% endfor %}-->
+<!--    </tr>-->
+<!--    {% for row in data %}-->
+<!--    <tr>-->
+<!--        {% for header in headers %}-->
+<!--        <td>{{ row|default_if_none:""|default:header }}</td>-->
+<!--        {% endfor %}-->
+<!--    </tr>-->
+<!--    {% endfor %}-->
+<!--</table>-->
 </body>
 </html>
