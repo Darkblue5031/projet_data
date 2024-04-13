@@ -90,6 +90,63 @@ def cast_bar_chart(request):
     )
 
 
+def cast_line_chart(request):
+    """
+    View to display line chart based on count of titles per cast.
+    :param request:
+    :return:
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+    line_chart_html = func.generate_release_year_line_chart(data)
+    line_chart_html1 = func.generate_release_year_line_chart(data, typ="TV Show")
+    return render(
+        request,
+        "html/cast_line_chart.html",
+        {"line_chart_html": line_chart_html, "line_chart_html1": line_chart_html1},
+    )
+
+
+def cast_circular_chart(request):
+    """
+
+    :param request:
+    :return:
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+    circular_chart_html = func.generate_listed_in_circular_chart(data)
+    circular_chart_html1 = func.generate_listed_in_circular_chart(data, typ="TV Show")
+    return render(
+        request,
+        "html/cast_circular_chart.html",
+        {
+            "circular_chart_html": circular_chart_html,
+            "circular_chart_html1": circular_chart_html1,
+        },
+    )
+
+
+def duration_line_chart(request):
+    """
+    View to display line chart based on duration/count.
+    """
+    with open("netflix_titles.csv", newline="", encoding="utf-8") as csvfile:
+        reader = DictReader(csvfile)
+        data = list(reader)
+
+    line_chart_html = func.generate_duration_line_chart(data)
+    line_chart_html1 = func.generate_duration_line_chart(data, typ="TV Show")
+
+    return render(
+        request,
+        "html/duration_line_chart.html",
+        {"line_chart_html": line_chart_html, "line_chart_html1": line_chart_html1},
+    )
+
+
 def index(request):
     """
     Index page view

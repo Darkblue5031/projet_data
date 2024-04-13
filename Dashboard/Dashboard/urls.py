@@ -28,4 +28,7 @@ urlpatterns = [
     path("duration_pie_chart/", views.duration_pie_chart, name="duration_pie_chart"),
     path("director_bar_chart/", views.director_bar_chart, name="director_bar_chart"),
     path("cast_bar_chart/", views.cast_bar_chart, name="cast_bar_chart"),
+    path("cast_line_chart/", views.cast_line_chart, name="cast_line_chart"),
+    path("cast_circular_chart/", views.cast_circular_chart, name="cast_circular_chart"),
+    path("duration_line_chart/", views.duration_line_chart, name="duration_line_chart"),
 ]

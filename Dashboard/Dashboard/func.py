@@ -302,3 +302,114 @@ def generate_cast_duration_bar_chart(data: list, top_n: int = 100, typ: str = "M
     )
 
     return fig.to_html(full_html=False)
+
+
+def generate_release_year_line_chart(data: list, typ: str = "Movie"):
+    """
+    Generate a line chart comparing release years with the count of titles released.
+    :param data: List of dictionaries containing title data.
+    :param typ: Type of titles to consider (e.g., "Movie", "TV Short", or None for all types).
+    :return: HTML code for the generated plot.
+    """
+    df = pd.DataFrame(data)
+
+    # Drop rows with missing or empty release years
+    df = df[df["release_year"].notnull() & (df["release_year"] != "")]
+
+    # Convert release year to integer
+    df["release_year"] = df["release_year"].astype(int)
+
+    # Filter by title type if specified
+    if typ is not None:
+        df = df[df["type"] == typ]
+
+    # Count the number of titles per release year
+    year_counts = df["release_year"].value_counts().sort_index()
+
+    # Create DataFrame for the line chart
+    year_df = pd.DataFrame(
+        {"release_year": year_counts.index, "title_count": year_counts.values}
+    )
+
+    # Generate line chart using Plotly Express
+    title_type = f"{typ}s" if typ is not None else "Titles"
+    title = f"Number of {title_type} Released by Year"
+    fig = px.line(year_df, x="release_year", y="title_count", title=title)
+
+    return fig.to_html(full_html=False)
+
+
+def generate_listed_in_circular_chart(data: list, typ: str = "Movie"):
+    """
+    Generate a circular area chart comparing listed_in categories with the count of titles in each category.
+    :param data: List of dictionaries containing title data.
+    :param typ: Type of titles to consider (e.g., "Movie", "TV Show", or None for all types).
+    :return: HTML code for the generated plot.
+    """
+    df = pd.DataFrame(data)
+
+    # Drop rows with missing or empty 'listed_in' values
+    df = df[df["listed_in"].notnull() & (df["listed_in"] != "")]
+
+    # Filter by title type if specified
+    if typ is not None:
+        df = df[df["type"] == typ]
+
+    # Split and explode the 'listed_in' column
+    df["listed_in"] = df["listed_in"].str.split(", ")
+    df = df.explode("listed_in")
+
+    # Count the number of titles in each 'listed_in' category
+    category_counts = df["listed_in"].value_counts()
+
+    # Create DataFrame for the circular chart
+    category_df = pd.DataFrame(
+        {"listed_in": category_counts.index, "title_count": category_counts.values}
+    )
+
+    # Generate circular area chart using Plotly Express
+    title_type = f"{typ}s" if typ is not None else "Titles"
+    title = f"Number of Titles in Each Category for {title_type}"
+    fig = px.sunburst(
+        category_df, path=["listed_in"], values="title_count", title=title
+    )
+
+    return fig.to_html(full_html=False)
+
+
+def generate_duration_line_chart(data: list, typ: str = "Movie"):
+    """
+    Generate a line chart comparing duration with the count of titles.
+    :param data: List of dictionaries containing title data.
+    :param typ: Type of titles to consider (e.g., "Movie", "TV Show", or None for all types).
+    :return: HTML code for the generated plot.
+    """
+    df = pd.DataFrame(data)
+
+    # Drop rows with missing or empty 'duration' values
+    df = df[df["duration"].notnull() & (df["duration"] != "")]
+
+    # Filter by title type if specified
+    if typ is not None:
+        df = df[df["type"] == typ]
+
+    # Convert duration to minutes
+    df["duration_minutes"] = df["duration"].apply(convert_to_minutes)
+
+    # Group by duration and count the number of titles
+    duration_counts = df["duration_minutes"].value_counts().sort_index()
+
+    # Create DataFrame for the line chart
+    duration_df = pd.DataFrame(
+        {
+            "duration_minutes": duration_counts.index,
+            "title_count": duration_counts.values,
+        }
+    )
+
+    # Generate line chart using Plotly Express
+    title_type = f"{typ}s" if typ is not None else "Titles"
+    title = f"Number of {title_type} by Duration (in Minutes)"
+    fig = px.line(duration_df, x="duration_minutes", y="title_count", title=title)
+
+    return fig.to_html(full_html=False)
