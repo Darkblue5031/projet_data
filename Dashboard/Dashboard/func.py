@@ -10,7 +10,7 @@ import plotly.express as px
 import plotly.graph_objs as go
 import plotly.io as pio
 
-df = pd.read_csv("netflix_titles.csv")
+df = pd.read_csv("netflix_coord.csv")
 
 
 def ratio(col: str, value: str) -> float:
