@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../static/css/globals.css">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV shows</title>
+</head>
+<div class="navbar" >
+    <div class="navbar-inner">
+        <img class="logo" src="../static/img/logo.png">
+        <a class="global" aria-label="Global" title="Global" href="/">
+            Global
+        </a>
+        <a class="movies" aria-label="Movies" title="Movies" href="/movies/">
+            Movies
+        </a>
+        <a class="TV shows" aria-label="TV shows" title="TV shows" href="/TV_shows/">
+            TV shows
+        </a>
+    </div>
+</div>
+<body>
+    <div class="dash2">
+        <div class="bar1">
+        {{ bar_chart_html1|safe }}
+        </div>
+        <div class="bar2">
+            {{ bar_chart_html3|safe }}
+        </div>
+    </div>
+
+    <div class="dash">
+        <div>
+            {{ line_chart_html1|safe }}
+        </div>
+        <div>
+            {{ line_chart_duration_html1|safe }}
+        </div>
+    </div>
+</body>
+</html>

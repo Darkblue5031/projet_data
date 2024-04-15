@@ -10,9 +10,18 @@ body {
     color: var(--Fonts);
     font-size: 20px;
     background: var(--Background);
+    overflow-y: auto;
+    color: rgba(57,57,57,0.51);
 }
 
 a {
     color: var(--Fonts);
     text-decoration: none;
+}
+
+a:hover {
+    color: var(--Primary);
+    background: rgba(255,255,255,0.05);
+    border-radius: 5px;
+    padding: 1%;
 }
