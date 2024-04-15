@@ -101,4 +101,4 @@ def index(request):
     pie_chart_html = generate_pie_chart(sorted_data)
     heatmap_html = generate_choropleth_map(sorted_data)
 
-    return render(request, 'html/test.html', {'sorted_data': sorted_data[:10], 'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html})
+    return render(request, 'html/movie_serie.html', {'sorted_data': sorted_data[:10], 'pie_chart_html': pie_chart_html, 'heatmap_html': heatmap_html})
