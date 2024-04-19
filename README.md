@@ -5,7 +5,7 @@ This README will guide you through setting up your environment, installing the r
 
 ## Prerequisites
 - [Python 3.12](https://www.python.org/downloads/) installed on your system.
-- [pip](https://pip.pypa.io/en/stable/installation/) package manager installed.
+- [Pip](https://pip.pypa.io/en/stable/installation/) package manager installed.
 - Setup Instructions
 ### 1. Clone the Repository
 ```bash
