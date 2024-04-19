@@ -136,7 +136,7 @@ def generate_choropleth_map_duration(data: list[dict[str, str]], typ: str = "Mov
         hover_name="country",
         color_continuous_scale=['#FAFAFA', '#E4101F', '#37090B'],
         title="Country average duration",
-        range_color=(0, max(local_df["avg_duration"])),
+        range_color=(0, 130),
     )
 
     fig.update_layout(
