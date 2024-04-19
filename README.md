@@ -31,7 +31,7 @@ source venv/bin/activate
 ```
 ### 5. Install Required Packages
 ```bash
-pip install -r requirements.txt
+pip install -r Requirements.txt
 ```
 ## Starting the Project
 ### 1. Run the Django Migrations
