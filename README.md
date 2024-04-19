@@ -34,15 +34,21 @@ source venv/bin/activate
 pip install -r Requirements.txt
 ```
 ## Starting the Project
-### 1. Run the Django Migrations
+
+### 1. Navigate to the Dashboard Directory
+
+```bash
+cd Dashboard
+```
+### 2. Run the Django Migrations
 ```bash
 python manage.py migrate
 ```
-### 2. Start the Development Server
+### 3. Start the Development Server
 ```bash
 python manage.py runserver
 ```
-### 3. Access the Dashboard
+### 4. Access the Dashboard
 Visit http://localhost:8000 in your web browser to view the Netflix Dashboard.
 
 ## Project Overview
