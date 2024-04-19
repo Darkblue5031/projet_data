@@ -3,7 +3,6 @@ Functions for generating visualizations for the Netflix Dashboard.
 """
 
 from collections import Counter
-from os.path import expanduser
 
 import pandas as pd
 import plotly.express as px
@@ -36,6 +35,7 @@ def convert_to_minutes(duration: str) -> int | None:
         return int(duration.split()[0])
     if "Season" in duration:
         return int(duration.split()[0]) * 12 * 45
+    return None
 
 
 def generate_pie_chart(data):
@@ -62,16 +62,16 @@ def generate_pie_chart(data):
     )
     values = [short_count, medium_count, long_count]
 
-    colors = ['#E4101F', '#AD0C11', '#960c10']
+    colors = ["#E4101F", "#AD0C11", "#960c10"]
 
     fig = go.Figure(
         data=[go.Pie(labels=labels, values=values, marker={"colors": colors})],
         layout=go.Layout(
-            paper_bgcolor='#211C19',
-            plot_bgcolor='#211C19',
-            font=dict(color='#FAFAFA'),
-            title='Netflix average duration',
-        )
+            paper_bgcolor="#211C19",
+            plot_bgcolor="#211C19",
+            font={"color": "#FAFAFA"},
+            title="Netflix average duration",
+        ),
     )
 
     pie_chart_html = fig.to_html(full_html=False)
@@ -126,24 +126,22 @@ def generate_choropleth_map_duration(data: list[dict[str, str]], typ: str = "Mov
         list(country_avg_durations.items()), columns=["country", "avg_duration"]
     )
 
-    colors = ['#E4101F', '#AD0C11', '#960c10'],
-
     fig = px.choropleth(
         local_df,
         locations="country",
         locationmode="country names",
         color="avg_duration",
         hover_name="country",
-        color_continuous_scale=['#FAFAFA', '#E4101F', '#37090B'],
+        color_continuous_scale=["#FAFAFA", "#E4101F", "#37090B"],
         title="Average duration by Country",
         range_color=(0, 130),
     )
 
     fig.update_layout(
-        geo=dict(bgcolor='rgba(0,0,0,0.06)', showframe=False, ),
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA'),
+        geo={"bgcolor": "rgba(0,0,0,0.06)", "showframe": False},
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#FAFAFA"},
     )
 
     # Convertir la figure en HTML
@@ -152,9 +150,9 @@ def generate_choropleth_map_duration(data: list[dict[str, str]], typ: str = "Mov
 
 
 def generate_choropleth_map(
-        data: list[dict[str, str]],
-        title: str = "Netflix Titles by Country",
-        col: str = "country",
+    data: list[dict[str, str]],
+    title: str = "Netflix Titles by Country",
+    col: str = "country",
 ):
     """
     Générer une carte choroplèthe bas
@@ -197,10 +195,10 @@ def generate_choropleth_map(
     )
 
     fig.update_layout(
-        geo=dict(bgcolor='rgba(0,0,0,0.06)', showframe=False, ),
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA'),
+        geo={"bgcolor": "rgba(0,0,0,0.06)", "showframe": False},
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#FAFAFA"},
     )
 
     map_html = pio.to_html(fig, full_html=False, include_plotlyjs=False)
@@ -231,12 +229,14 @@ def generate_director_bar_chart(data):
     labels = [director for director, count in top_directors]
     values = [count for director, count in top_directors]
 
-    fig = go.Figure(data=[go.Bar(y=labels, x=values, orientation="h", marker_color='#E4101F')])
+    fig = go.Figure(
+        data=[go.Bar(y=labels, x=values, orientation="h", marker_color="#E4101F")]
+    )
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA'),
-        title='Top 10 most represented directors',
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#FAFAFA"},
+        title="Top 10 most represented directors",
     )
     bar_chart_html = fig.to_html(full_html=False)
     return bar_chart_html
@@ -264,11 +264,11 @@ def generate_cast_bar_chart(data: list, top_n: int = 100, typ: str = "Movie"):
     type_col = df["type"].iloc[0]
     title = f"Top 50 Cast Members in {type_col}s by Number of Titles"
     fig = px.bar(cast_df, x="cast", y="count", title=title)
-    fig.update_traces(marker_color='#E4101F')
+    fig.update_traces(marker_color="#E4101F")
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA'),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#FAFAFA"},
     )
 
     return fig.to_html(full_html=False)
@@ -300,7 +300,6 @@ def generate_cast_duration_bar_chart(data: list, top_n: int = 100, typ: str = "M
     print()
 
     # Split and explode the 'cast' column
-    cast_counts = df["cast"].str.split(", ", expand=True).stack().value_counts()
     df["cast"] = df["cast"].str.split(", ", expand=True).stack().explode("cast")
 
     # Convert duration to minutes
@@ -335,11 +334,11 @@ def generate_cast_duration_bar_chart(data: list, top_n: int = 100, typ: str = "M
         title=f"Top {top_n} Cast Members in {typ}s by Average Duration",
         labels={"avg_duration": "Average Duration (minutes)"},
     )
-    fig.update_traces(marker_color='#E4101F')
+    fig.update_traces(marker_color="#E4101F")
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA'),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#FAFAFA"},
     )
 
     return fig.to_html(full_html=False)
@@ -376,11 +375,11 @@ def generate_release_year_line_chart(data: list, typ: str = "Movie"):
     title_type = f"{typ}s" if typ is not None else "Titles"
     title = f"Number of {title_type} Released by Year"
     fig = px.line(year_df, x="release_year", y="title_count", title=title)
-    fig.update_traces(line=dict(color='#E4101F'))
+    fig.update_traces(line={"color": "#E4101F"})
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA'),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#FAFAFA"},
     )
 
     return fig.to_html(full_html=False)
@@ -388,7 +387,8 @@ def generate_release_year_line_chart(data: list, typ: str = "Movie"):
 
 def generate_listed_in_circular_chart(data: list, typ: str = "Movie"):
     """
-    Generate a circular area chart comparing listed_in categories with the count of titles in each category.
+    Generate a circular area chart comparing listed_in categories
+    with the count of titles in each category.
     :param data: List of dictionaries containing title data.
     :param typ: Type of titles to consider (e.g., "Movie", "TV Show", or None for all types).
     :return: HTML code for the generated plot.
@@ -418,12 +418,16 @@ def generate_listed_in_circular_chart(data: list, typ: str = "Movie"):
     title_type = f"{typ}s" if typ is not None else "Titles"
     title = f"Number of Titles in Each Category for {title_type}"
     fig = px.sunburst(
-        category_df, path=["listed_in"], values="title_count", title=title, color_discrete_sequence=['#E4101F', '#AD0C11', '#960c10']
+        category_df,
+        path=["listed_in"],
+        values="title_count",
+        title=title,
+        color_discrete_sequence=["#E4101F", "#AD0C11", "#960c10"],
     )
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA'),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#FAFAFA"},
     )
 
     return fig.to_html(full_html=False)
@@ -463,11 +467,11 @@ def generate_duration_line_chart(data: list, typ: str = "Movie"):
     title_type = f"{typ}s" if typ is not None else "Titles"
     title = f"Number of {title_type} by Duration (in Minutes)"
     fig = px.line(duration_df, x="duration_minutes", y="title_count", title=title)
-    fig.update_traces(line=dict(color='#E4101F'))
+    fig.update_traces(line={"color": "#E4101F"})
     fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#FAFAFA'),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#FAFAFA"},
     )
 
     return fig.to_html(full_html=False)
